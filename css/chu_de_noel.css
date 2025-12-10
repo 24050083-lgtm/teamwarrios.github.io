@@ -1,0 +1,18 @@
+
+/* File chu_de_noel.css dùng để chỉnh trang trí theo từng mùa */
+
+.hero-decor-left .bell,
+.hero-decor-right .tree {
+    filter: drop-shadow(0 10px 20px rgba(0,0,0,0.6));
+}
+
+/* Có thể thêm các lớp theo mùa:
+   .chu-de-tet .hero-decor-..., .chu-de-valentine ...  */
+
+body.chu-de-tet .hero-decor-right .tree {
+    background: linear-gradient(to top, #b91c1c, #f97316);
+}
+
+body.chu-de-valentine .hero-decor-left .bell {
+    background: radial-gradient(circle at top, #fecaca 0, #f472b6 60%, #be185d 100%);
+}

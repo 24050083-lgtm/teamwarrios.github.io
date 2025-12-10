@@ -1,0 +1,143 @@
+
+.products-main {
+    background: rgba(15,23,42,0.96);
+    border-radius: 28px;
+    padding: 20px 20px 24px;
+    box-shadow: 0 18px 40px rgba(0,0,0,0.7);
+}
+body.theme-sang .products-main {
+    background: rgba(255,255,255,0.98);
+}
+.toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+}
+.toolbar h2 {
+    font-size: 20px;
+}
+.sort-box select {
+    border-radius: 999px;
+    padding: 6px 14px;
+    border: 1px solid rgba(148,163,184,0.7);
+    background: rgba(15,23,42,0.9);
+    color: #e5e7eb;
+}
+body.theme-sang .sort-box select {
+    background: #f9fafb;
+    color: #111827;
+}
+
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 18px;
+}
+.product-card {
+    background: rgba(21,24,48,0.96);
+    border-radius: 22px;
+    overflow: hidden;
+    box-shadow: 0 14px 32px rgba(0,0,0,0.7);
+    display: flex;
+    flex-direction: column;
+}
+body.theme-sang .product-card {
+    background: #ffffff;
+}
+.product-img-wrap {
+    position: relative;
+    height: 210px;
+    overflow: hidden;
+}
+.product-img-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.product-sale-badge {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: #ef4444;
+    color: #fff;
+    font-size: 11px;
+    padding: 4px 8px;
+    border-radius: 999px;
+}
+.product-heart {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 32px;
+    height: 32px;
+    border-radius: 999px;
+    background: rgba(15,23,42,0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #f97316;
+}
+body.theme-sang .product-heart {
+    background: rgba(15,23,42,0.1);
+}
+.product-body {
+    padding: 12px 14px 14px;
+}
+.product-name {
+    font-weight: 700;
+    margin-bottom: 4px;
+}
+.product-price {
+    color: #facc15;
+    font-weight: 800;
+    margin-bottom: 6px;
+}
+.product-desc {
+    font-size: 13px;
+    color: #9ca3af;
+    margin-bottom: 10px;
+}
+.product-actions {
+    display: flex;
+    gap: 10px;
+}
+.btn-secondary {
+    flex: 1;
+    border-radius: 999px;
+    border: 1px solid rgba(148,163,184,0.7);
+    background: transparent;
+    color: #e5e7eb;
+    padding: 7px 0;
+    cursor: pointer;
+}
+body.theme-sang .btn-secondary {
+    color: #111827;
+}
+.btn-add-quick {
+    flex: 1;
+}
+
+/* Pagination */
+.pagination-container {
+    margin-top: 16px;
+    display: flex;
+    justify-content: center;
+}
+.pagination {
+    display: flex;
+    gap: 6px;
+}
+.pagination button {
+    width: 32px;
+    height: 32px;
+    border-radius: 999px;
+    border: none;
+    background: rgba(15,23,42,0.8);
+    color: #e5e7eb;
+    cursor: pointer;
+    font-size: 13px;
+}
+.pagination button.active {
+    background: linear-gradient(135deg, var(--mau-ngoc), var(--mau-hong));
+}

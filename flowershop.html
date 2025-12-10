@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FlowerShop - Hoa Tươi & Quà Tặng</title>
+
+    <!-- FONT + ICON -->
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- CSS MODULES -->
+    <link rel="stylesheet" href="css/chung.css">
+    <link rel="stylesheet" href="css/header.css">
+    <link rel="stylesheet" href="css/danh_muc.css">
+    <link rel="stylesheet" href="css/san_pham.css">
+    <link rel="stylesheet" href="css/modal.css">
+    <link rel="stylesheet" href="css/chan_trang.css">
+    <link rel="stylesheet" href="css/chu_de_noel.css">
+    <link rel="stylesheet" href="css/giao_dien_responsive.css">
+</head>
+<body>
+
+    <!-- POPUP NOEL LẦN ĐẦU -->
+    <div id="promo-overlay" class="modal-overlay">
+        <div class="promo-card">
+            <button class="close-btn-circle" onclick="closeModal('promo-overlay')">
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="promo-content">
+                <div class="promo-title">GIÁNG SINH AN LÀNH 🎄</div>
+                <p>Giảm ngay <strong>5%</strong> cho tất cả sản phẩm thuộc danh mục Hoa Giáng Sinh.</p>
+                <div class="promo-code">Mã: NOEL2025</div>
+                <button class="btn-primary" onclick="filterCategory('hoa-giang-sinh'); closeModal('promo-overlay')">
+                    Xem Ngay
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- THANH THÔNG BÁO FLASH SALE CỐ ĐỊNH -->
+    <div class="flash-sale-bar" id="flash-sale-bar">
+        <span>🎁 Flash Sale Noel – Nhập mã <strong>NOEL2025</strong> giảm 5% Hoa Giáng Sinh</span>
+        <span id="flash-countdown">Kết thúc sau: --:--:--</span>
+    </div>
+
+    <!-- HEADER CỐ ĐỊNH -->
+    <header class="header-wrapper">
+        <div class="container header-container">
+            <div class="logo-section" onclick="resetToHome()">
+                <div class="logo-icon">🌸</div>
+                <div class="logo-text">
+                    <span class="brand-name">FlowerShop</span>
+                    <span class="brand-slogan">Trao Gửi Yêu Thương</span>
+                </div>
+            </div>
+
+            <div class="search-section">
+                <div class="search-box">
+                    <input type="text" id="search-input"
+                           placeholder="Tìm kiếm hoa hồng, lan, xương rồng..."
+                           oninput="handleSearch()">
+                    <button class="search-btn"><i class="fas fa-search"></i></button>
+                </div>
+            </div>
+
+            <div class="user-controls">
+                <!-- Nút cài đặt (thay cho nút đổi giao diện) -->
+                <button class="settings-btn" onclick="openModal('settings-modal')" title="Cài đặt">
+                    <i class="fas fa-cog"></i>
+                </button>
+
+                <!-- Khu vực đăng nhập / avatar -->
+                <div id="auth-section">
+                    <button class="btn-outline" onclick="openModal('auth-modal')">Đăng Nhập</button>
+                </div>
+
+                <!-- Giỏ hàng -->
+                <div class="cart-btn-wrapper" onclick="openModal('cart-modal')">
+                    <button class="btn-cart">
+                        <i class="fas fa-shopping-cart"></i> Giỏ Hàng
+                        <span id="cart-count" class="cart-badge">0</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- HERO VIDEO + TRANG TRÍ NOEL -->
+    <section class="hero-wrapper">
+        <div class="container hero-container">
+            <div class="hero-decor hero-decor-left">
+                <div class="bell bell-1"></div>
+                <div class="bell bell-2"></div>
+                <div class="bell bell-3"></div>
+            </div>
+            <div class="hero-main">
+                <div class="video-frame">
+                    <video autoplay muted loop playsinline class="hero-video">
+                        <source src="https://assets.mixkit.co/videos/preview/mixkit-white-flowers-in-the-wind-3918-large.mp4" type="video/mp4">
+                    </video>
+                    <div class="hero-overlay">
+                        <h1>Sắc Màu Của Cảm Xúc</h1>
+                        <p>Tuyển chọn những đóa hoa tươi đẹp nhất mỗi ngày</p>
+                        <button class="btn-primary" onclick="document.getElementById('products-main').scrollIntoView({behavior:'smooth'})">
+                            Khám Phá Ngay
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-decor hero-decor-right">
+                <div class="tree"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- LAYOUT SHOP -->
+    <div class="container shop-layout">
+        <!-- SIDEBAR DANH MỤC -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header" onclick="toggleSidebar()">
+                <h3>Danh Mục Sản Phẩm</h3>
+                <i class="fas fa-chevron-down arrow-icon" id="sidebar-arrow"></i>
+            </div>
+            <div class="sidebar-content" id="sidebar-content">
+                <ul class="category-list">
+                    <li data-cat="all" class="active" onclick="filterCategory('all')">Tất Cả Sản Phẩm</li>
+                    <li data-cat="hoa-tinh-yeu" onclick="filterCategory('hoa-tinh-yeu')">🌹 Hoa Tình Yêu</li>
+                    <li data-cat="hoa-sinh-nhat" onclick="filterCategory('hoa-sinh-nhat')">🎂 Hoa Sinh Nhật</li>
+                    <li data-cat="hoa-khai-truong" onclick="filterCategory('hoa-khai-truong')">💰 Hoa Khai Trương</li>
+                    <li data-cat="hoa-giang-sinh" onclick="filterCategory('hoa-giang-sinh')">🎄 Hoa Giáng Sinh</li>
+                    <li data-cat="hoa-xuong-rong-da" onclick="filterCategory('hoa-xuong-rong-da')">🌵 Xương Rồng Đá</li>
+                    <li data-cat="hoa-trang-tri-phong" onclick="filterCategory('hoa-trang-tri-phong')">🏡 Hoa Trang Trí</li>
+                    <li data-cat="hoa-ngay-le" onclick="filterCategory('hoa-ngay-le')">🎁 Hoa Ngày Lễ</li>
+                    <li data-cat="hoa-tot-nghiep" onclick="filterCategory('hoa-tot-nghiep')">🎓 Hoa Tốt Nghiệp</li>
+                    <li data-cat="chau-canh" onclick="filterCategory('chau-canh')">🌱 Chậu Cây Mini</li>
+                    <li data-cat="qua-tang" onclick="filterCategory('qua-tang')">🎀 Quà Tặng</li>
+                </ul>
+            </div>
+        </aside>
+
+        <!-- MAIN PRODUCTS -->
+        <main class="products-main" id="products-main">
+            <div class="toolbar">
+                <h2 id="category-title">Tất Cả Sản Phẩm</h2>
+                <div class="sort-box">
+                    <select id="sort-select" onchange="handleSort()">
+                        <option value="newest">Mới nhất</option>
+                        <option value="price-asc">Giá tăng dần</option>
+                        <option value="price-desc">Giá giảm dần</option>
+                        <option value="promo">Đang khuyến mãi</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="product-grid" id="product-grid"></div>
+
+            <div class="pagination-container">
+                <div class="pagination" id="pagination"></div>
+            </div>
+        </main>
+    </div>
+
+    <!-- INFO / FAQ -->
+    <div class="container info-section">
+        <div class="info-card">
+            <div class="info-header" onclick="toggleInfo(this)">
+                <h3>Giới Thiệu ShopFlower</h3>
+                <i class="fas fa-plus"></i>
+            </div>
+            <div class="info-body">
+                <p>ShopFlower tự hào là thiên đường hoa tươi và quà tặng, nơi cung cấp các loại hoa nhập khẩu và nội địa chất lượng cao nhất.</p>
+            </div>
+        </div>
+        <div class="info-card">
+            <div class="info-header" onclick="toggleInfo(this)">
+                <h3>Tại Sao Chọn Chúng Tôi?</h3>
+                <i class="fas fa-plus"></i>
+            </div>
+            <div class="info-body">
+                <ul>
+                    <li>Hoa tươi 100% mỗi ngày</li>
+                    <li>Giao hàng nhanh trong 2 giờ</li>
+                    <li>Miễn phí thiệp chúc mừng</li>
+                </ul>
+            </div>
+        </div>
+        <div class="info-card">
+            <div class="info-header" onclick="toggleInfo(this)">
+                <h3>Liên Hệ</h3>
+                <i class="fas fa-plus"></i>
+            </div>
+            <div class="info-body">
+                <p>Địa chỉ: 123 Đường Hoa, Quận 1, TP.HCM</p>
+                <p>Hotline: 0909 888 777</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="detailed-footer">
+        <div class="container footer-content">
+            <div class="footer-col">
+                <h4>Về Chúng Tôi</h4>
+                <p>ShopFlower - Nơi cảm xúc thăng hoa qua ngôn ngữ của các loài hoa. Chúng tôi luôn nỗ lực để mang đến sự hài lòng tuyệt đối.</p>
+            </div>
+            <div class="footer-col">
+                <h4>Hỗ Trợ Khách Hàng</h4>
+                <a href="#" onclick="showSupport('hd')">Hướng dẫn mua hàng</a>
+                <a href="#" onclick="showSupport('cs')">Chính sách đổi trả</a>
+                <a href="#" onclick="showSupport('bm')">Bảo mật thông tin</a>
+            </div>
+            <div class="footer-col">
+                <h4>Kết Nối</h4>
+                <div class="social-links">
+                    <a href="#" onclick="copySocialLink(event, 'https://facebook.com/flowershop')">
+                        <i class="fab fa-facebook"></i>
+                        <span class="social-text">facebook.com/flowershop</span>
+                    </a>
+                    <a href="#" onclick="copySocialLink(event, 'https://instagram.com/flowershop')">
+                        <i class="fab fa-instagram"></i>
+                        <span class="social-text">instagram.com/flowershop</span>
+                    </a>
+                    <a href="#" onclick="copySocialLink(event, 'https://tiktok.com/@flowershop')">
+                        <i class="fab fa-tiktok"></i>
+                        <span class="social-text">tiktok.com/@flowershop</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="copyright">© 2025 ShopFlower. All rights reserved.</div>
+    </footer>
+
+    <!-- MODAL ĐĂNG NHẬP -->
+    <div id="auth-modal" class="modal-overlay">
+        <div class="modal-box auth-box">
+            <button class="close-btn-circle" onclick="closeModal('auth-modal')"><i class="fas fa-times"></i></button>
+            <h2>Đăng Nhập</h2>
+            <form onsubmit="handleLogin(event)">
+                <input id="login-identifier" type="text" placeholder="Email hoặc Số điện thoại" class="form-input" required>
+                <input id="login-password" type="password" placeholder="Mật khẩu" class="form-input" required>
+                <button class="btn-primary full-width">Đăng Nhập</button>
+            </form>
+            <p class="auth-note">
+                Tài khoản mặc định: <strong>admin@example.com</strong> / <strong>admin36</strong>
+            </p>
+            <p class="auth-register">
+                Chưa có tài khoản?
+                <a href="#" onclick="switchAuth('signup')">Đăng ký ngay</a>
+            </p>
+            <div class="auth-social-row">
+                <button type="button" class="btn-auth-google" onclick="loginWithProvider('google')">Google</button>
+                <button type="button" class="btn-auth-facebook" onclick="loginWithProvider('facebook')">Facebook</button>
+                <button type="button" class="btn-auth-phone" onclick="loginWithProvider('phone')">Số điện thoại</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL ĐĂNG KÝ -->
+    <div id="signup-modal" class="modal-overlay">
+        <div class="modal-box auth-box">
+            <button class="close-btn-circle" onclick="closeModal('signup-modal')"><i class="fas fa-times"></i></button>
+            <h2>Đăng Ký</h2>
+            <form onsubmit="handleSignup(event)">
+                <input id="signup-name" type="text" placeholder="Họ tên" class="form-input" required>
+                <input id="signup-email" type="email" placeholder="Email" class="form-input" required>
+                <input id="signup-phone" type="tel" placeholder="Số điện thoại" class="form-input" required>
+                <input id="signup-password" type="password" placeholder="Mật khẩu" class="form-input" required>
+                <button class="btn-primary full-width">Tạo Tài Khoản</button>
+            </form>
+            <p class="auth-register">
+                Đã có tài khoản?
+                <a href="#" onclick="switchAuth('login')">Đăng nhập</a>
+            </p>
+        </div>
+    </div>
+
+    <!-- MODAL TÀI KHOẢN -->
+    <div id="profile-modal" class="modal-overlay">
+        <div class="modal-box profile-box">
+            <button class="close-btn-circle" onclick="closeModal('profile-modal')"><i class="fas fa-times"></i></button>
+            <h2>Tài Khoản</h2>
+            <div class="avatar-area">
+                <img src="https://placehold.co/100x100/7b5cff/ffffff?text=U" id="user-avatar">
+                <label class="edit-btn">
+                    <i class="fas fa-camera"></i>
+                    <input type="file" hidden onchange="updateAvatar(this)">
+                </label>
+            </div>
+            <h3 id="profile-name">Khách hàng</h3>
+            <p id="profile-email">guest@example.com</p>
+            <p class="profile-extra">
+                Trong mục Tài khoản, bạn có thể xem lịch sử đơn hàng, cập nhật ảnh đại diện và quản lý thông tin cá nhân.
+            </p>
+            <button class="btn-outline full-width" onclick="openModal('orders-modal'); closeModal('profile-modal')">
+                Lịch Sử Đơn Hàng
+            </button>
+            <button class="btn-text-red full-width" onclick="logout()">Đăng Xuất</button>
+        </div>
+    </div>
+
+    <!-- MODAL LỊCH SỬ ĐƠN HÀNG -->
+    <div id="orders-modal" class="modal-overlay">
+        <div class="modal-box cart-box">
+            <button class="close-btn-circle" onclick="closeModal('orders-modal')"><i class="fas fa-times"></i></button>
+            <h2>Lịch Sử Đơn Hàng</h2>
+            <div class="cart-scroll" id="order-history-list">
+                <p style="text-align:center">Chưa có đơn hàng nào.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL GIỎ HÀNG -->
+    <div id="cart-modal" class="modal-overlay">
+        <div class="modal-box cart-box">
+            <button class="close-btn-circle" onclick="closeModal('cart-modal')"><i class="fas fa-times"></i></button>
+            <h2>Giỏ Hàng</h2>
+            <div class="cart-scroll">
+                <table class="cart-table">
+                    <thead>
+                        <tr><th>Hình</th><th>Tên</th><th>Giá</th><th>SL</th><th>Xóa</th></tr>
+                    </thead>
+                    <tbody id="cart-body"></tbody>
+                </table>
+            </div>
+            <div class="voucher-row">
+                <input id="voucher-input" class="form-input" placeholder="Nhập mã khuyến mãi (NOEL2025, FLOWER10)..." />
+                <button class="btn-primary" onclick="applyVoucher()">Áp dụng</button>
+            </div>
+            <div class="cart-footer">
+                <div>Tổng: <span id="cart-total">0đ</span></div>
+                <button class="btn-primary" onclick="openCheckout()">Thanh Toán</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL THANH TOÁN -->
+    <div id="checkout-modal" class="modal-overlay">
+        <div class="modal-box auth-box">
+            <button class="close-btn-circle" onclick="closeModal('checkout-modal')"><i class="fas fa-times"></i></button>
+            <h2>Thông Tin Giao Hàng</h2>
+            <form onsubmit="processCheckout(event)">
+                <input type="text" id="checkout-name" placeholder="Họ tên" class="form-input" required>
+                <input type="tel" id="checkout-phone" placeholder="Số điện thoại" class="form-input" required>
+                <input type="text" id="checkout-address" placeholder="Địa chỉ" class="form-input" required>
+                <button class="btn-primary full-width">Xác Nhận Đặt Hàng</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL CHI TIẾT SẢN PHẨM -->
+    <div id="detail-modal" class="modal-overlay">
+        <div class="modal-box detail-box">
+            <button class="close-btn-circle" onclick="closeModal('detail-modal')"><i class="fas fa-times"></i></button>
+            <div class="detail-layout">
+                <img id="detail-img" src="" alt="">
+                <div class="detail-info">
+                    <h2 id="detail-name"></h2>
+                    <p class="price" id="detail-price"></p>
+                    <p class="desc" id="detail-desc"></p>
+                    <div class="qty-wrap">
+                        <button type="button" onclick="adjustDetailQty(-1)">-</button>
+                        <span id="detail-qty">1</span>
+                        <button type="button" onclick="adjustDetailQty(1)">+</button>
+                    </div>
+                    <button class="btn-primary full-width" onclick="addFromDetail()">Thêm Vào Giỏ</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL HỖ TRỢ -->
+    <div id="support-popup" class="modal-overlay">
+        <div class="modal-box auth-box">
+            <button class="close-btn-circle" onclick="closeModal('support-popup')"><i class="fas fa-times"></i></button>
+            <h2 id="support-title"></h2>
+            <div id="support-content" style="line-height:1.6;"></div>
+        </div>
+    </div>
+
+    <!-- MODAL CÀI ĐẶT -->
+    <div id="settings-modal" class="modal-overlay">
+        <div class="modal-box auth-box">
+            <button class="close-btn-circle" onclick="closeModal('settings-modal')"><i class="fas fa-times"></i></button>
+            <h2>Cài Đặt</h2>
+
+            <div class="settings-group">
+                <h4>Giao diện</h4>
+                <label><input type="radio" name="theme" value="dark" checked onchange="changeTheme(this.value)"> Tối</label>
+                <label><input type="radio" name="theme" value="light" onchange="changeTheme(this.value)"> Sáng</label>
+            </div>
+
+            <div class="settings-group">
+                <h4>Chủ đề mùa</h4>
+                <select id="season-select" onchange="changeSeason(this.value)">
+                    <option value="noel">Noel</option>
+                    <option value="tet">Tết</option>
+                    <option value="valentine">Valentine</option>
+                </select>
+            </div>
+
+            <div class="settings-group">
+                <h4>Ngôn ngữ</h4>
+                <select id="lang-select" onchange="changeLanguage(this.value)">
+                    <option value="en">English</option>
+                    <option value="vi">Tiếng Việt</option>
+                    <option value="zh">中文</option>
+                    <option value="ja">日本語</option>
+                    <option value="ko">한국어</option>
+                </select>
+            </div>
+
+            <div class="settings-group">
+                <h4>Thông báo</h4>
+                <label><input type="checkbox" id="notify-toggle" onchange="toggleNotification(this.checked)"> Bật thông báo khuyến mãi</label>
+            </div>
+        </div>
+    </div>
+
+    <!-- ICON LIÊN HỆ NỔI -->
+    <div class="floating-contact">
+        <div class="icon phone" title="Gọi nhanh" onclick="fakeCall()"><i class="fas fa-phone"></i></div>
+        <div class="icon zalo" title="Chat nhanh" onclick="openChatPopup()"><i class="fas fa-comment"></i></div>
+    </div>
+
+    <!-- NÚT LÊN ĐẦU TRANG -->
+    <button id="btn-back-top" class="back-top" onclick="scrollToTop()" aria-label="Lên đầu trang">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <!-- SCRIPT MODULES -->
+    <script src="js/sanpham.js"></script>
+    <script src="js/cart.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/ui.js"></script>
+</body>
+</html>
